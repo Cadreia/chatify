@@ -1,6 +1,6 @@
 import React, {useState} from "react";
 import { Link } from "react-router-dom";
-import {signin, signup} from "../helpers/auth";
+import {signin, signInWithGitHub, signInWithGoogle} from "../helpers/auth";
 
 const Login = () => {
     const [error, setError] = useState(null)
@@ -25,6 +25,22 @@ const Login = () => {
         setError("")
         try {
             await signin(userDetails.email, userDetails.password);
+        } catch (error) {
+            setError(error.message)
+        }
+    }
+
+    const googleSignIn = async() => {
+        try {
+            await signInWithGoogle();
+        } catch (error) {
+            setError(error.message)
+        }
+    }
+
+    const githubSignIn = async() => {
+        try {
+            await signInWithGitHub();
         } catch (error) {
             setError(error.message)
         }
@@ -72,6 +88,13 @@ const Login = () => {
                         ) : null}
                         <button className="btn btn-primary px-5" type="submit">Login</button>
                     </div>
+                    <p>You can also log in with any of these services</p>
+                    <button className="btn btn-danger mr-2" type="button" onClick={googleSignIn}>
+                        Sign in with Google
+                    </button>
+                    <button className="btn btn-secondary" type="button" onClick={githubSignIn}>
+                        Sign in with GitHub
+                    </button>
                     <hr />
                     <p>
                         Don't have an account? <Link to="/signup">Sign up</Link>

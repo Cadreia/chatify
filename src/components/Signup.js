@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import { Link } from 'react-router-dom';
-import { signup } from "../helpers/auth";
+import {signInWithGoogle, signInWithGitHub, signup} from "../helpers/auth";
 
 const SignUp = () => {
 
@@ -34,7 +34,24 @@ const SignUp = () => {
         }
     }
 
-        return (
+    const googleSignIn = async() => {
+        try {
+            await signInWithGoogle();
+        } catch (error) {
+            setError(error.message)
+        }
+    }
+
+    const githubSignIn = async() => {
+        try {
+            await signInWithGitHub();
+        } catch (error) {
+            setError(error.message)
+        }
+    }
+
+
+    return (
             <div className="container">
                 <form className="mt-5 py-5 px-5" onSubmit={handleSubmit}>
                     <h1>
@@ -52,6 +69,13 @@ const SignUp = () => {
                         {error ? <p className="text-danger">{error}</p> : null}
                         <button className="btn btn-primary px-5" type="submit">Sign up</button>
                     </div>
+                    <p>You can also sign up with any of these services</p>
+                    <button className="btn btn-danger mr-2" type="button" onClick={googleSignIn}>
+                        Sign up with Google
+                    </button>
+                    <button className="btn btn-secondary" type="button" onClick={githubSignIn}>
+                        Sign up with GitHub
+                    </button>
                     <hr></hr>
                     <p>Already have an account? <Link to="/login">Login</Link></p>
                 </form>
